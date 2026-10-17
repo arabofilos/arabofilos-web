@@ -70,37 +70,66 @@
     <p>&copy; 2026 Arabófilos - Todos los derechos reservados</p>
   </footer>
 
-  <script>
-    // SUSTITUYE ESTOS DOS VALORES CON TUS CLAVES DE SUPABASE
+<script>
+    // SUSTITUYE ESTOS DOS VALORES EXACTOS CON TUS CLAVES DE SUPABASE
     const SUPABASE_URL = 'https://oxqaxjpcbtqlkbtbfaxv.supabase.co/rest/v1/';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cWF4anBjYnRxbGtidGJmYXh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNzU5ODAsImV4cCI6MjEwNzc1MTk4MH0.fUDPebSFyF_w2rdGKlunzpYXwawT-XP3YyFYD5f0Dhc';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let supabaseClient = null;
+
+    try {
+      if (SUPABASE_URL.includes('TU_PROYECTO') || SUPABASE_KEY.includes('eyJ...')) {
+        console.warn('Recuerda poner tus claves reales de Supabase.');
+      } else {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (e) {
+      alert('Error al conectar con Supabase: ' + e.message);
+    }
 
     async function registrar() {
-      const email = document.getElementById('email').value;
+      if (!supabaseClient) {
+        alert('Configura primero tu SUPABASE_URL y SUPABASE_KEY en el código.');
+        return;
+      }
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (!email || !password) {
+        alert('Por favor, introduce un correo y una contraseña.');
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
       if (error) {
-        alert('Error: ' + error.message);
+        alert('Error al registrar: ' + error.message);
       } else {
-        alert('¡Registro correcto! Revisa tu correo electrónico para confirmar tu cuenta.');
+        alert('¡Registro correcto! Revisa tu correo electrónico para confirmar la cuenta.');
       }
     }
 
     async function iniciarSesion() {
-      const email = document.getElementById('email').value;
+      if (!supabaseClient) {
+        alert('Configura primero tu SUPABASE_URL y SUPABASE_KEY en el código.');
+        return;
+      }
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (!email || !password) {
+        alert('Por favor, introduce tu correo y contraseña.');
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
       if (error) {
-        alert('Error: ' + error.message);
+        alert('Error al iniciar sesión: ' + error.message);
       } else {
-        document.getElementById('user-status').innerText = '¡Hola, ' + data.user.email + '! Has iniciado sesión.';
+        document.getElementById('user-status').innerText = '¡Hola, ' + data.user.email + '! Has iniciado sesión correctamente.';
       }
     }
   </script>
-
 </body>
 </html>
