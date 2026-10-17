@@ -1,0 +1,16 @@
+{
+  "name": "Arabófilos - Aprende Árabe",
+  "short_name": "Arabófilos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1b4332",
+  "theme_color": "#1b4332",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://www.arabofilos.com/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon"
+    }
+  ]
+}
